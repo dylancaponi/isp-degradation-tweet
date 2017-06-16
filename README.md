@@ -32,9 +32,20 @@ Edit config.json.  Keep double quote formatting around all values except those f
 
 `plan_speed` - the expected download rate in Mbps of your plan
 
-`tweet_threshold` - the percentage of your actual speed over your plan speed where
+`tweet_threshold` - the threshold of your actual speed over your plan speed where you want to complain.  For example 90 would mean you tweet when you're getting less than 90Mbps on a 100Mbps plan.
 
 [Follow these instructions](https://stackoverflow.com/a/12335636/1236326) to get Twitter dev account and app credentials.
 These are: `consumer_key`, `consumer_secret`, `access_token`, `access_token_secret`
 
+#### Run on a schedule
+
+Type `pwd` to get path of your installed folder.
+
+Eg. `$ pwd`
+
+`/Users/dc/repo/isp-degradation-tweet`
+
+Enter crontab: `crontab -e`
+
+Scroll to the bottom and add a line
 
