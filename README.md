@@ -34,12 +34,7 @@ Edit config.json.  Keep double quote formatting around all values except those f
 
 `tweet_threshold` - the percentage of your actual speed over your plan speed where
 
-Follow these instructions to setup a Twitter dev app and get the following parameters:
+[Follow these instructions](https://stackoverflow.com/a/12335636/1236326) to get Twitter dev account and app credentials.
+These are: `consumer_key`, `consumer_secret`, `access_token`, `access_token_secret`
 
-`consumer_key`
 
-`consumer_secret`
-
-`access_token`
-
-`access_token_secret`
