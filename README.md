@@ -37,7 +37,19 @@ Edit config.json.  Keep double quote formatting around all values except those f
 [Follow these instructions](https://stackoverflow.com/a/12335636/1236326) to get Twitter dev account and app credentials.
 These are: `consumer_key`, `consumer_secret`, `access_token`, `access_token_secret`
 
-#### Run on a schedule
+### Usage
+
+After following Installation and Configuration sections type:
+
+`venv/bin/python main.py`
+
+If everything is configured properly, a tweet will be sent when your internet speed degrades bellow your set degradation_threshold.
+
+* Results of runs are stored in results.log
+
+* Info logging is in info.log
+
+### Run on a schedule
 
 Type `pwd` to get path of your installed folder.
 
