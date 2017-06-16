@@ -45,7 +45,10 @@ Eg. `$ pwd`
 
 `/Users/dc/repo/isp-degradation-tweet`
 
-Enter crontab: `crontab -e`
+Enter crontab: `EDITOR=nano crontab -e`
 
-Scroll to the bottom and add a line
+Scroll to the bottom and add a line.  Match the path to what you found when you typed pwd.
 
+Eg. `30 14 * * * cd /Users/dc/Repo/isp-degradation-tweet && venv/bin/python main.py`
+
+This example would run the script at 2:30pm every day.  [Learn more about cron here.](http://man7.org/linux/man-pages/man5/crontab.5.html)
