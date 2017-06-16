@@ -1,50 +1,59 @@
+import os
 import json
 import logging
 
 import speedtest
 import tweepy
 
+# configure logging
 logging.basicConfig(
-    filename="test.log",
+    filename="info.log",
     level=logging.INFO,
     format="%(asctime)s:%(levelname)s:%(message)s"
     )
 
+# load config file
 with open('config.json') as f:    
     cfg = json.load(f)
 
-# constants
+# define constants
 bps_to_mbps = 1.0/1000000.0
 
+# connect to twitter api
 auth = tweepy.OAuthHandler(cfg['consumer_key'], cfg['consumer_secret'])
 auth.set_access_token(cfg['access_token'], cfg['access_token_secret'])
 twitter_api = tweepy.API(auth)
-print twitter_api.me().name
+logging.info('connected to Twitter API')
 
-# servers = [1]
+# run speed test
+logging.info('start speed test...')
 s = speedtest.Speedtest()
-# s.get_servers(servers)
 s.get_best_server()
 s.download()
 s.upload()
-# s.share()
-
 results_dict = s.results.dict()
+logging.info(results_dict)
+
+# write results
+with open('results.log', 'a') as f:
+    json.dump(results_dict, f)
+    f.write(os.linesep)
+
+# convert speeds to Mbps
 download_speed = results_dict['download'] * bps_to_mbps
 upload_speed = results_dict['upload'] * bps_to_mbps
 
-print results_dict
-logging.info(results_dict)
-
 plan_speed = cfg['plan_speed']
 percent_degraded = round(100*download_speed/plan_speed, 2)
-print percent_degraded
-print cfg['tweet_threshold']
+logging.info('percent_degraded: ' + str(percent_degraded))
+
 if percent_degraded < cfg['tweet_threshold']:
-	status = cfg['isp_twitter_handle'] + ' Service degraded to ' + str(percent_degraded) + '% of ' + \
-			str(plan_speed) + 'Mbps plan. ' + str(round(download_speed, 2)) + 'down ' + str(round(upload_speed, 2)) + 'up ' + \
-			str(results_dict['server']['latency']) + 'ping on ' + cfg['connection_type'] + ' via ' + results_dict['server']['sponsor']
-	print status
-	quit()
-	twitter_api.update_status(status=str(results_dict['download'] * bps_to_mbps))
+    status = cfg['isp_twitter_handle'] + ' Service degraded to ' + str(percent_degraded) + '% of ' + \
+            str(plan_speed) + 'Mbps plan. ' + str(round(download_speed, 2)) + 'down ' + str(round(upload_speed, 2)) + 'up ' + \
+            str(results_dict['server']['latency']) + 'ms ping on ' + cfg['connection_type'] + ' via ' + results_dict['server']['host']
+    logging.info('tweeting: ' + status)
+    twitter_api.update_status(status=status)
+else:
+    logging.info('speed above ' + str(cfg['tweet_threshold']) + '% degradation threshold. not tweeting.')
+
 
